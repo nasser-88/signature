@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء توقيع الكتروني</title>
+    <style>
+        @font-face {
+            font-family: 'GE SS Unique Light';
+            src: url('GE-SS-Unique-Light.woff') format('woff');
+        }
+        @font-face {
+            font-family: 'GE SS Unique Bold';
+            src: url('GE-SS-Unique-Bold.woff') format('woff');
+            font-weight: bold;
+        }
+        body {
+            font-family: "GE SS Unique Light", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            width: 70%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        h1 {
+            color: #388e3c;
+            text-align: right;
+            margin-bottom: 20px;
+            font-family: 'GE SS Unique Bold', sans-serif;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #2e7d32;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: 'GE SS Unique Light', sans-serif;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: 'GE SS Unique Light', sans-serif;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #canvas-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+        #outputCanvas {
+            width: auto;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="emara.png" width="150" height="150" style="float:left">
+    <h1>إنشاء توقيع الكتروني</h1>
+    <form id="dataForm">
+        <label for="nameAr">الاسم الثلاثي بالعربي:</label>
+        <input type="text" id="nameAr" required><br>
+
+        <label for="nameEn">الاسم الثلاثي بالإنجليزي:</label>
+        <input type="text" id="nameEn" required><br>
+
+        <label for="department">الإدارة / القسم:</label>
+        <input type="text" id="department" required><br>
+
+        <label for="job">المسمى الوظيفي:</label>
+        <input type="text" id="job" required><br>
+
+        <label for="phone">رقم الجوال:</label>
+        <input type="text" id="phone" required placeholder="9665xxxxxxxx"><br>
+
+        <label for="Website">الموقع الالكتروني:</label>
+        <input type="text" id="Website" required value="https://e-najran.gov.sa"><br>
+
+        <label for="email">البريد الالكتروني:</label>
+        <input type="email" id="email" required><br>
+
+        <label for="ext">رقم التحويلة:</label>
+        <input type="text" id="ext" required><br>
+
+        <button type="button" onclick="generateImage()">إنشاء التوقيع الإلكتروني</button>
+    </form>
+
+    <div id="canvas-container">
+        <canvas id="outputCanvas" width="720" height="250"></canvas>
+        <br><br>
+        <button id="downloadBtn" style="display:none;" onclick="downloadImage()">تحميل التوقيع</button>
+    </div>
+</div>
+
+<script>
+    const backgroundImage = new Image();
+    backgroundImage.src = 'signature.png';
+
+    backgroundImage.onload = function() {
+        document.getElementById('dataForm').style.display = 'block';
+    }
+
+    function generateImage() {
+        const nameAr = document.getElementById('nameAr').value;
+        const nameEn = document.getElementById('nameEn').value;
+        const department = document.getElementById('department').value;
+        const job = document.getElementById('job').value;
+        const phone = document.getElementById('phone').value;
+        const Website = document.getElementById('Website').value;
+        const email = document.getElementById('email').value;
+        const ext = document.getElementById('ext').value;
+
+        const canvas = document.getElementById('outputCanvas');
+        const ctx = canvas.getContext('2d');
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+        ctx.textAlign = 'center';
+        ctx.font = '20px "GE SS Unique Bold"';
+        ctx.fillStyle = '#117750';
+        ctx.fillText(nameAr, canvas.width / 1.9, 80);
+        ctx.fillStyle = '#b8860b';
+        ctx.fillText(nameEn, canvas.width / 1.9, 115);
+
+        ctx.fillStyle = '#117750';
+        ctx.font = '20px "GE SS Unique Light"';
+        ctx.fillText(department, canvas.width / 1.9, 150);
+        ctx.fillText(job, canvas.width / 1.9, 185);
+
+        ctx.textAlign = 'left';
+        ctx.font = '11px "Arial"';
+        ctx.fillStyle = '#b8860b';
+        ctx.fillText(phone, canvas.width / 1.24, 94);
+        ctx.fillText(Website, canvas.width / 1.24, 120);
+        ctx.fillText(email, canvas.width / 1.24, 143);
+        ctx.fillText(ext, canvas.width / 1.24, 167);
+
+        document.getElementById('downloadBtn').style.display = 'inline-block';
+    }
+
+    function downloadImage() {
+        const canvas = document.getElementById('outputCanvas');
+        const imageUrl = canvas.toDataURL("image/png");
+        const link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = 'signature.png';
+        link.click();
+    }
+</script>
+
+</body>
+</html>
